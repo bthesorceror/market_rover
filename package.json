@@ -1,0 +1,16 @@
+{
+  "name": "market_rover",
+  "version": "0.0.1",
+  "description": "Stock market monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Brandon Farmer",
+  "license": "BSD",
+  "dependencies": {
+    "runner5": "0.0.1",
+    "columnist": "0.0.3"
+  }
+}
