@@ -1,5 +1,4 @@
-var YahooRequest = require('./index'),
-    proxy        = require('./proxy');
+var YahooRequest = require('./index');
 
 var request = new YahooRequest();
 

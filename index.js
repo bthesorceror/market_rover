@@ -3,8 +3,7 @@ var http         = require('http'),
     qs           = require('querystring'),
     Columnist    = require('columnist'),
     EventEmitter = require('events').EventEmitter,
-    util         = require('util'),
-    proxy        = require('./proxy');
+    util         = require('util');
 
 function createDataObjByKey(key, array) {
   var result = {};
@@ -26,7 +25,7 @@ var translation = {
 };
 
 function YahooFinanceRequest() {
-  ['symbol', 'ask', 'bid'].forEach(proxy(this.addAttribute, this));
+  ['symbol', 'ask', 'bid'].forEach(this.addAttribute.bind(this));
 }
 
 YahooFinanceRequest.prototype.columnist = function() {
@@ -99,9 +98,9 @@ YahooFinanceRequest.prototype.getData = function() {
 YahooFinanceRequest.prototype._getData = function(cb) {
   var handler = function(res) {
     this._handleResponse(res, cb);
-  }
+  }.bind(this);
 
-  var request = this._request(proxy(handler, this));
+  var request = this._request(handler);
   request.on('error', function(err) { cb(err, null); });
   request.end();
 }
@@ -115,7 +114,7 @@ YahooFinanceRequest.prototype._handleResponse = function(res, cb) {
   var response = "";
   res.setEncoding('utf8');
   res.on('data', function(data) { response += data; });
-  res.on('end', proxy(function() { cb(null, this.parse(response)); }, this));
+  res.on('end', function() { cb(null, this.parse(response)); }.bind(this));
 }
 
 YahooFinanceRequest.prototype.parse = function(response) {
@@ -130,18 +129,15 @@ function YahooFinanceEmitter(request, time) {
 util.inherits(YahooFinanceEmitter, EventEmitter);
 
 YahooFinanceEmitter.prototype.start = function() {
-  var self   = this,
-      runner = this.request.getData();
-
-  runner.success(proxy(this.emitUpdates, this));
-  var interval = proxy(runner.run, runner);
-  this._interval = setInterval(interval, this.time);
+  var runner = this.request.getData();
+  runner.on('success', this.emitUpdates.bind(this));
+  this._interval = setInterval(runner.run, this.time);
 }
 
 YahooFinanceEmitter.prototype.emitUpdates = function(updates) {
-  Object.keys(updates).forEach(proxy(function(key) {
+  Object.keys(updates).forEach(function(key) {
     this.emit('update', key, updates[key]);
-  }, this));
+  }.bind(this));
 }
 
 YahooFinanceEmitter.prototype.stop = function() {
