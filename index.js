@@ -131,7 +131,7 @@ util.inherits(YahooFinanceEmitter, EventEmitter);
 YahooFinanceEmitter.prototype.start = function() {
   var runner = this.request.getData();
   runner.on('success', this.emitUpdates.bind(this));
-  this._interval = setInterval(runner.run, this.time);
+  this._interval = setInterval(runner.run.bind(runner), this.time);
 }
 
 YahooFinanceEmitter.prototype.emitUpdates = function(updates) {
