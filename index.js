@@ -114,7 +114,9 @@ YahooFinanceRequest.prototype._handleResponse = function(res, cb) {
   var response = "";
   res.setEncoding('utf8');
   res.on('data', function(data) { response += data; });
-  res.on('end', function() { cb(null, this.parse(response)); }.bind(this));
+  res.on('end', function() {
+    cb(null, this.parse(response));
+  }.bind(this));
 }
 
 YahooFinanceRequest.prototype.parse = function(response) {

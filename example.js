@@ -13,8 +13,12 @@ request.addAttribute('earnings_per_share');
 var emitter = request.emitter();
 
 emitter.on('update', function(symbol, update) {
-  // console.log(symbol + ": " + update['ask']);
-  console.dir(update);
+  console.log("*****************************************************************");
+  console.log("Symbol: " + update.symbol);
+  console.log("Asking: " + update.ask);
+  console.log("Bidding: " + update.bid);
+  console.log("*****************************************************************");
+  console.log("");
 });
 
 emitter.start();
