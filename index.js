@@ -73,7 +73,10 @@ YahooFinanceRequest.prototype.addSymbol = function(symbol) {
 }
 
 YahooFinanceRequest.prototype.queryString = function() {
-  return qs.stringify({s: this.symbols(), f: this.attributes().join('')});
+  return qs.stringify({
+    s: this.symbols().join(','),
+    f: this.attributes().join('')
+  });
 }
 
 YahooFinanceRequest.prototype.fullPath = function() {
